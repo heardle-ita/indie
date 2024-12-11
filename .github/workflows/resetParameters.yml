@@ -1,0 +1,34 @@
+name: Reset Firebase Database
+
+on:
+  schedule:
+    - cron: '55 22 * * 0'
+
+jobs:
+  reset-firebase-database:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+
+    - name: Install Dependencies
+      run: |
+        npm install firebase-admin
+
+    - name: Check Script File
+      run: |
+        if [ ! -f "script-score-reset.js" ]; then
+          echo "Error: Script file not found."
+          exit 1
+        fi
+    
+    - name: Run Reset Script
+      env:
+        FIREBASE_CRED: ${{ secrets.FIREBASE_CRED }}
+      run: node script-score-reset.js
