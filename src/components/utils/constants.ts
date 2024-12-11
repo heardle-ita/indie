@@ -2,7 +2,7 @@ import { SongConfig } from "../../types/interfaces/song";
 
 export const HEARDLE_IT_WEB_URL = "https://heardle.it";
 
-export const GAME_VARIANT="indie/";
+export const GAME_VARIANT = "indie/";
 
 export const GAME_RESULT_MESSAGES = [
     "Ammazza che pischellettə indie",
