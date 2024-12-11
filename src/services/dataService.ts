@@ -3,7 +3,7 @@ import { SongConfig } from "../types/interfaces/song";
 import { artists } from "../components/utils/artists";
 import { getDatabase, ref, onValue, set } from "firebase/database";
 import { db } from "./firebase";
-import { banWords } from "../components/utils/constants";
+import { banWords, GAME_VARIANT } from "../components/utils/constants";
 import { of } from "rxjs";
 
 interface Map {
@@ -32,7 +32,7 @@ const setSong = (day: string, selectedSong: any) => {
 
   let hardCodedSong = selectedSong;
 
-  set(ref(db, "songs/" + day), hardCodedSong);
+  set(ref(db, GAME_VARIANT + "songs/" + day), hardCodedSong);
 };
 
 async function fetchSong(accessToken: string): Promise<any> {
@@ -101,7 +101,7 @@ export const getDailySong = (
   return new Promise<SongConfig>(async (resolve, reject) => {
     try {
       // Reference to the Firebase song data based on the dayPath
-      const songRef = ref(db, "songs/" + dayPath);
+      const songRef = ref(db, GAME_VARIANT + "songs/" + dayPath);
 
       // Listen to the value of the songRef in Firebase
       onValue(

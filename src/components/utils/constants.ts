@@ -2,16 +2,18 @@ import { SongConfig } from "../../types/interfaces/song";
 
 export const HEARDLE_IT_WEB_URL = "https://heardle.it";
 
+export const GAME_VARIANT="indie/";
+
 export const GAME_RESULT_MESSAGES = [
-    "👂 Assoluto! 👏",
-    "🥳 Fantastico! 🏆",
-    "🚀 Veloce come il vento! 💨",
-    "🤩 Sei un mito delle HIT! 🙌",
-    "👍 Ce l'abbiamo fatta! 🎉",
-    "😅 Per un soffio... domani andrà meglio! 😉"   
+    "Ammazza che pischellettə indie",
+    "Chapeau.",
+    "Eeeeeasy",
+    "Ti sei meritatə una birra",
+    "Onesto.",
+    "Pe' poco, menomale"
 ];
 
-export const GAME_RESULT_FAILED_MESSAGE = "Non ti preoccupare, chiedi ai tuoi amici, magari loro la sanno!";
+export const GAME_RESULT_FAILED_MESSAGE = "Nt'e preoccupa, chiedi ai soci, magari la sanno";
 
 export const STRING_COMPARE_LOCALE = "it";
 
@@ -22,7 +24,7 @@ export const icon = ["🥇","🥈","🥉"]
 export const errorString = "Oops... qualcosa è andato storto! Controlla le tue impostazioni di connessione e riprova!";
 
 export const versions = [
-    {name:"Indie", url: "http://indie.heardle.it/"},  
+    {name:"", url: "http://heardle.it/", tag: ""}, ,  
     {name:"90s", url: "", tag: "Coming Soon", class:"coming-soon"},
     {name:"Amici", url: "", tag: "Coming Soon", class:"coming-soon"},
     {name:"X Factor", url: "", tag: "Coming Soon", class:"coming-soon"}

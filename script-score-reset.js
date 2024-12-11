@@ -10,7 +10,7 @@ const TIME_TO_DELETE = 604800000; // 7 days
 
 // As an admin, the app has access to read and write all data, regardless of Security Rules
 const db = admin.database();
-const usersRef = db.ref("users");
+const usersRef = db.ref(GAME_VARIANT + "/users");
 
 // Function to remove all users
 const removeOrResetUsers = async () => {
