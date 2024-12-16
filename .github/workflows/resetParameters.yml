@@ -31,4 +31,5 @@ jobs:
     - name: Run Reset Script
       env:
         FIREBASE_CRED: ${{ secrets.FIREBASE_CRED }}
+        GAME_VARIANT: ${{ vars.GAME_VARIANT }}
       run: node script-score-reset.js
