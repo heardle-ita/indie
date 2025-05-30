@@ -179,7 +179,7 @@ function GameResult({ songConfig, date }: { songConfig: any, date: string }) {
             <Table />
           </div>
           <NextTimer/>
-          {/* <Banner/> */} 
+          <Banner/>
 
         </div>
 
