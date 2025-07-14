@@ -40,6 +40,7 @@ function HowToPlay() {
     toString = toString.replaceAll("0","o");
     toString = toString.replaceAll("4","a");
     toString = toString.replaceAll("3","e");
+    toString = toString.replaceAll(/\s/g, "")
     return toString;
   }
 
@@ -50,7 +51,7 @@ function HowToPlay() {
     const regex = /^(?!\s*$)[a-zA-Z0-9\s!?\-_$@&]{0,24}$/;
     if (regex.test(name) || name === "") {
       setUsername(name);
-    }
+    } else return;
 
     let nameString = convertToString(name);
     if (nameString.length >= 3) {
