@@ -4,6 +4,7 @@ import * as cheerio from 'cheerio';
 import { STRING_COMPARE_LOCALE } from '../components/utils/constants';
 import { SongOption } from '../types/interfaces/options';
 import { SongConfig } from '../types/interfaces/song';
+import { getTimestampServer } from './firebaseRealtime';
 
 
 const merge = (a: SongOption[], b: SongOption[], predicate = (a: SongOption, b: SongOption) => a.value === b.value) => {
@@ -98,6 +99,25 @@ function getDayStr() {
 
     let newFormat = `${year}${month}${day}`;
     return newFormat;
+}
+
+function getDayPartsFromTimestamp(ts: number) {
+    const date = new Date(ts);
+
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+
+    return {
+        'day': day < 10 ? ("0" + day) : String(day),
+        'month': month < 10 ? ("0" + month) : String(month),
+        'year': String(year)
+    };
+}
+
+function formatTimestampAsPath(ts: number): string {
+    const { year, month, day } = getDayPartsFromTimestamp(ts);
+    return `${year}/${month}/${day}`;
 }
 
 function similarity(s1: string, s2: string) {
@@ -216,29 +236,27 @@ const fetchServerDate = async (retries = 10, delay = 1000): Promise<string> => {
     }
   
     for (let attempt = 1; attempt <= retries; attempt++) {
-      try {
-        const response = await fetchWithTimeout("https://timeapi.io/api/time/current/zone?timeZone=Europe%2FRome");
-        if (response.ok) {
-          const data = await response.json();
-          const day = data.dateTime.replaceAll("-", "/").substring(0, 10);
-          localStorage.setItem("serverDate", day);
-          console.debug("Fetched server date: " + day);
-          return day;
-        } else {
-          throw new Error(`Failed to fetch server date (Status: ${response.status})`);
+        try {
+            // Recupera timestamp dal server Firebase
+            const ts = await getTimestampServer();
+        
+            // Format `YYYY/MM/DD`
+            const data = formatTimestampAsPath(ts);
+        
+            localStorage.setItem("serverDate", data);
+            console.debug("Fetched server date from Firebase: " + data);
+            return data;
+        
+        } catch (error) {
+            console.error(`Error fetching server date from Firebase (Attempt ${attempt}/${retries}):`, error);
+        
+            if (attempt < retries) {
+            await new Promise((resolve) => setTimeout(resolve, delay));
+            console.debug("Retrying...");
+            } else {
+            console.error("Max retries reached. Reloading page...");
+            }
         }
-      } catch (error) {
-        console.error(`Error fetching server date (Attempt ${attempt}/${retries}):`, error);
-  
-        if (attempt < retries) {
-          // Attendi prima di riprovare
-          await new Promise((resolve) => setTimeout(resolve, delay));
-          console.debug("Retrying...");
-        } else {
-          // Dopo il massimo dei tentativi, refresh della pagina
-          console.error("Max retries reached. Reloading page...");
-        }
-      }
     }
   
     // In caso di errore in tutte le iterazioni (non dovrebbe mai arrivarci)
