@@ -4,7 +4,7 @@ import * as cheerio from 'cheerio';
 import { STRING_COMPARE_LOCALE } from '../components/utils/constants';
 import { SongOption } from '../types/interfaces/options';
 import { SongConfig } from '../types/interfaces/song';
-import { getTimestampServer } from './firebaseRealtime';
+import { getTimestampServer, updateTimestampServer } from './firebaseRealtime';
 
 
 const merge = (a: SongOption[], b: SongOption[], predicate = (a: SongOption, b: SongOption) => a.value === b.value) => {
@@ -237,6 +237,8 @@ const fetchServerDate = async (retries = 10, delay = 1000): Promise<string> => {
   
     for (let attempt = 1; attempt <= retries; attempt++) {
         try {
+            await updateTimestampServer();
+            
             // Recupera timestamp dal server Firebase
             const ts = await getTimestampServer();
         

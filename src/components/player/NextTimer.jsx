@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { updateTimestampServer, getTimestampServer } from "../../services/firebaseRealtime";
 
 function NextTimer() {
   const [countDown, setCountDown] = useState();
@@ -7,31 +8,38 @@ function NextTimer() {
 
   useEffect(() => {
     let isMounted = true;
+  
     const fetchData = async () => {
-      let responseDay = null;
-      while (isMounted && responseDay === null) {
+      while (isMounted) {
         try {
-          responseDay = await fetch(
-            "https://timeapi.io/api/time/current/zone?timeZone=Europe%2FRome"
-          );
+          await updateTimestampServer();
+          // Ottieni il timestamp dal server
+          const ts = await getTimestampServer();
+          const date = new Date(ts);
+  
+          if (isMounted) {
+            setServerDate(date);
+          }
+  
+          // Uscire dal ciclo se ok
+          break;
+  
         } catch (error) {
-          console.error("Errore CORS:", error);
-        }
-        if (responseDay.ok) {
-          const dataResponse = await responseDay.json();
-          const day = dataResponse.dateTime;
-          setServerDate(day);
-        } else {
+          console.error("Error fetching server date from Firebase:", error);
+  
+          // Aspetta e riprova
           await new Promise((resolve) => setTimeout(resolve, 1200));
         }
       }
     };
+  
     fetchData();
-
+  
     return () => {
       isMounted = false;
     };
   }, []);
+
 
   useEffect(() => {
     let today = new Date(serverDate);

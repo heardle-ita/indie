@@ -32,13 +32,18 @@ async function updateUserByUid(uid: any, score: any) {
   });
 }
 
-async function getTimestampServer(): Promise<number> {
+async function updateTimestampServer() {
   const myRef = ref(db, "tmp");
 
   // Scrive il timestamp sul server
   await update(myRef, {
     lastUpdated: serverTimestamp(),
   });
+}
+
+
+async function getTimestampServer(): Promise<number> {
+  const myRef = ref(db, "tmp");
 
   // Legge il valore aggiornato
   const snapshot = await get(myRef);
@@ -54,5 +59,6 @@ export {
   getUsers,
   getUserByUid,
   updateUserByUid,
+  updateTimestampServer,
   getTimestampServer
 };
