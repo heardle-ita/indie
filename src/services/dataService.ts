@@ -136,6 +136,7 @@ export const getDailySong = (
             trackName = trackName.replaceAll(".", "");
             trackName = trackName.replaceAll("?", "");
             trackName = trackName.replaceAll("!", "");
+            trackName = trackName.replaceAll("-", "");
 
             // Prepare the hardcoded song data to store in Firebase
             const hardCodedSong = {
